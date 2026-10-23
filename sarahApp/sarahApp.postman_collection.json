@@ -1,0 +1,449 @@
+{
+  "info": {
+    "_postman_id": "d9f28e2a-8acf-4c7a-bc1e-811555dd29bc",
+    "name": "sarahApp",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57065343",
+    "_collection_link": "https://go.postman.co/collection/57065343-d9f28e2a-8acf-4c7a-bc1e-811555dd29bc?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "signUp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept-Language",
+                "value": "0"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\":\"sara mahmoud\",\r\n    \"email\":\"ebrahimd375@gmail.com\",\r\n    \"password\":\"14620005#Dina\",\r\n    \"confirmPassword\":\"14620005#Dina\",\r\n    \"phone\":\"+201153723298\",\r\n    \"gender\":0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/signup",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"email\":\"ebrahimd375@gmail.com\",\r\n    \"password\":\"146200#05Dina\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/login",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "confirmEmail",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n          \"email\":\"ebrahimd375@gmail.com\",\r\n          \"otp\":\"209281\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/confirm-email",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "confirm-email"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "resendEmail",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"email\":\"ebrahimd375@gmail.com\"\r\n  \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/resend-confirm-email",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "resend-confirm-email"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "user",
+      "item": [
+        {
+          "name": "PROFILE",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let response = pm.response.json();\r\npm.environment.set(\"BEARER_ACCESS_TOKEN\", response.data.access_token);\r\npm.environment.set(\"BERAER_REFRESH_TOKEN\", response.data.refresh_token);\r\nconsole.log(\"✅ Tokens saved to environment variables: ACCESS_TOKEN & REFRESH_TOKEN\");\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0njb}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/user/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "user",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let response = pm.response.json();\r\npm.environment.set(\"BEARER_ACCESS_TOKEN\", response.data.access_token);\r\npm.environment.set(\"BERAER_REFRESH_TOKEN\", response.data.refresh_token);\r\nconsole.log(\"✅ Tokens saved to environment variables: ACCESS_TOKEN & REFRESH_TOKEN\");\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0njb}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{json_web_token_0g2e}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"fristName\": \"Dinaaa Updated\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/user/update",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "user",
+                "update"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "rotate-token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let response = pm.response.json();\r\npm.environment.set(\"BEARER_ACCESS_TOKEN\", response.data.access_token);\r\npm.environment.set(\"BERAER_REFRESH_TOKEN\", response.data.refresh_token);\r\nconsole.log(\"✅ Tokens saved to environment variables: ACCESS_TOKEN & REFRESH_TOKEN\");\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0qhd}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{BERAER_REFRESH_TOKEN}}"
+              }
+            ],
+            "url": {
+              "raw": "{{BASE_URL}}/user/rotate-token",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "user",
+                "rotate-token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let response = pm.response.json();\r\npm.environment.set(\"BEARER_ACCESS_TOKEN\", response.data.access_token);\r\npm.environment.set(\"BERAER_REFRESH_TOKEN\", response.data.refresh_token);\r\nconsole.log(\"✅ Tokens saved to environment variables: ACCESS_TOKEN & REFRESH_TOKEN\");\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_0trm}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"action\":0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/user/log-out",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "user",
+                "log-out"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "forgotPassword",
+      "item": [
+        {
+          "name": "request-forgot-password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"email\":\"ebrahimd375@gmail.com\"\r\n  \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/request-forgot-password",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "request-forgot-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "verify-forgot-password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"email\":\"ebrahimd375@gmail.com\",\r\n        \"otp\":\"751996\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/verify-forgot-password",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "verify-forgot-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "reset-forgot-password",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"email\":\"ebrahimd375@gmail.com\",\r\n   \"password\":\"146200#05Dina\",\r\n    \"confirmPassword\":\"146200#05Dina\",\r\n    \"otp\":\"993981\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/reset-forgot-password",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "reset-forgot-password"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_092z",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0w6l",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0rac",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0epv",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0g2e",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0njb",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0trm",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0qhd",
+      "secret": true
+    }
+  ]
+}
