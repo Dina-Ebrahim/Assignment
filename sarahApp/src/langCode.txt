@@ -1,0 +1,4 @@
+100=>username
+101=>email
+102=>phone
+103=>password
