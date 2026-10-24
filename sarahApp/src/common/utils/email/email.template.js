@@ -213,6 +213,222 @@ export const templates = {
 </html>
     `;
   },
+
+  [EmailSubjectEnum.ENABLE_2FA]: (data) => {
+    return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enable Two-Factor Authentication</title>
+</head>
+
+<body style="margin:0; padding:0; background-color:#f4f5fb; font-family:Arial,Helvetica,sans-serif;">
+
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+    style="background-color:#f4f5fb; padding:35px 12px;">
+    <tr>
+      <td align="center">
+
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+          style="max-width:560px; background-color:#ffffff; border-radius:22px; overflow:hidden;">
+
+          <tr>
+            <td align="center"
+              style="background-color:#dfeaff; padding:38px 25px 30px;">
+
+              <div style="font-size:36px;">🔐</div>
+
+              <h1 style="margin:14px 0 8px; color:#334d80; font-size:27px;">
+                Enable Two-Factor Authentication
+              </h1>
+
+              <p style="margin:0; color:#62749a; font-size:15px; line-height:1.8;">
+                One more step to protect your account ♡
+              </p>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:35px 30px 25px;">
+
+              <p style="margin:0 0 25px; color:#6c7285; font-size:15px; line-height:1.9;">
+                You requested to enable two-factor authentication.
+                Enter the verification code below to confirm this change.
+              </p>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center"
+                    style="background-color:#f0edff; border:1px dashed #b7a7ed;
+                    border-radius:16px; padding:25px 15px;">
+
+                    <p style="margin:0 0 12px; color:#7666a9; font-size:12px;
+                      font-weight:bold; letter-spacing:2px;">
+                      YOUR VERIFICATION CODE
+                    </p>
+
+                    <div style="font-size:34px; font-weight:bold; letter-spacing:8px;
+                      color:#6551a5; line-height:1.5;">
+                      ${data.code}
+                    </div>
+
+                    <p style="margin:12px 0 0; color:#8a80aa; font-size:12px;">
+                      This code expires in 2 minutes.
+                    </p>
+
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:25px 0 0; color:#777d8e; font-size:13px; line-height:1.9;">
+                Never share this code with anyone.
+                If you did not request this change, you can ignore this email.
+              </p>
+
+              <p style="margin:25px 0 0; color:#555d73; font-size:15px; line-height:1.8;">
+                With care, ♡<br>
+                <strong style="color:#6551a5;">The Support Team</strong>
+              </p>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center"
+              style="background-color:#faf9ff; padding:22px 20px;">
+
+              <p style="margin:0 0 8px; color:#a19ab7; font-size:12px;">
+                Made with ♡ just for you
+              </p>
+
+              <p style="margin:0; color:#aaaabd; font-size:11px; line-height:1.7;">
+                This is an automated email. Please do not reply to this message.
+              </p>
+
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
+    `;
+  },
+
+  [EmailSubjectEnum.LOGIN_2FA]: (data) => {
+    return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Verification</title>
+</head>
+
+<body style="margin:0; padding:0; background-color:#f4f5fb; font-family:Arial,Helvetica,sans-serif;">
+
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+    style="background-color:#f4f5fb; padding:35px 12px;">
+    <tr>
+      <td align="center">
+
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+          style="max-width:560px; background-color:#ffffff; border-radius:22px; overflow:hidden;">
+
+          <tr>
+            <td align="center"
+              style="background-color:#dfeaff; padding:38px 25px 30px;">
+
+              <div style="font-size:36px;">📩</div>
+
+              <h1 style="margin:14px 0 8px; color:#334d80; font-size:27px;">
+                Login Verification Code
+              </h1>
+
+              <p style="margin:0; color:#62749a; font-size:15px; line-height:1.8;">
+                Keep your account safe ♡
+              </p>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:35px 30px 25px;">
+
+              <p style="margin:0 0 25px; color:#6c7285; font-size:15px; line-height:1.9;">
+                A login attempt was made on your account.
+                Enter the following code to complete your login.
+              </p>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center"
+                    style="background-color:#f0edff; border:1px dashed #b7a7ed;
+                    border-radius:16px; padding:25px 15px;">
+
+                    <p style="margin:0 0 12px; color:#7666a9; font-size:12px;
+                      font-weight:bold; letter-spacing:2px;">
+                      YOUR LOGIN CODE
+                    </p>
+
+                    <div style="font-size:34px; font-weight:bold; letter-spacing:8px;
+                      color:#6551a5; line-height:1.5;">
+                      ${data.code}
+                    </div>
+
+                    <p style="margin:12px 0 0; color:#8a80aa; font-size:12px;">
+                      This code expires in 2 minutes.
+                    </p>
+
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:25px 0 0; color:#777d8e; font-size:13px; line-height:1.9;">
+                Do not share this code with anyone.
+                If you did not attempt to log in, secure your account.
+              </p>
+
+              <p style="margin:25px 0 0; color:#555d73; font-size:15px; line-height:1.8;">
+                With care, ♡<br>
+                <strong style="color:#6551a5;">The Support Team</strong>
+              </p>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center"
+              style="background-color:#faf9ff; padding:22px 20px;">
+
+              <p style="margin:0 0 8px; color:#a19ab7; font-size:12px;">
+                Made with ♡ just for you
+              </p>
+
+              <p style="margin:0; color:#aaaabd; font-size:11px; line-height:1.7;">
+                This is an automated email. Please do not reply to this message.
+              </p>
+
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
+    `;
+  },
 };
 
 export const verifyEmailTemplate = (data) => {

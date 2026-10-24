@@ -2,18 +2,21 @@ import { UserModel } from "../../DB/model/index.js";
 
 import { findByIdAndUpdate } from "../../common/repository/index.js";
 import {
+  compare,
   createLoginCredntials,
   createRevokeToken,
   userBaseRevokeToken,
-  userRevokeToken,
 } from "../../common/security/index.js";
+import { ACCESS_TOKEN_EXPIRES_IN } from "../../config.js";
 import {
-  ACCESS_TOKEN_EXPIRES_IN,
-  REFRESH_TOKEN_EXPIRES_IN,
-} from "../../config.js";
-import { ConflictException } from "../../common/exception/error.excption.js";
+  BadRequestException,
+  ConflictException,
+} from "../../common/exception/error.excption.js";
 import { del, get, keys, set } from "../../common/services/index.js";
 import { logoutEnum } from "../../common/enum/security.enum.js";
+import { sendEmailOtp } from "../authentication/authentication.service.js";
+import { EmailSubjectEnum } from "../../common/enum/email.enum.js";
+import { UserEmailKey } from "../../common/utils/email/send.email.js";
 
 const PROFILE_CACHE_TTL = 300;
 export const userProfileCacheKey = (userId) =>
@@ -73,4 +76,49 @@ export const logOut = async (payload, user, { action }) => {
     default:
       return createRevokeToken({ payload });
   }
+};
+export const enableTwoFactor = async ({ user }) => {
+  if (user.twoFactorEnabled) {
+    throw ConflictException({
+      message: "Two-factor authentication is already enabled",
+    });
+  }
+  if (!user.confirmEmail) {
+    throw BadRequestException({ message: "Please confirm your email first" });
+  }
+  await sendEmailOtp({
+    email: user.email,
+    subject: EmailSubjectEnum.ENABLE_2FA,
+  });
+  return {
+    message: "OTP sent to your email",
+  };
+};
+export const confirmTwoFactor = async ({ user, otp }) => {
+  if (user.twoFactorEnabled) {
+    throw ConflictException("Two-factor authentication is already enabled");
+  }
+  const key = UserEmailKey({
+    email: user.email,
+    subject: EmailSubjectEnum.ENABLE_2FA,
+  });
+  const hashedOTP = await get({ key });
+  if (!hashedOTP) {
+    throw ConflictException("OTP not found or expired");
+  }
+
+  const isValid = await compare(otp, hashedOTP);
+
+  if (!isValid) {
+    throw BadRequestException("Invalid OTP");
+  }
+  user.twoFactorEnabled = true;
+  user.twoFactorEnabledAt = new Date();
+  await user.save();
+
+  await del({ key });
+
+  return {
+    message: "Two-factor authentication enabled successfully",
+  };
 };

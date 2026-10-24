@@ -9,7 +9,6 @@ import { findOne, createOne } from "../../common/repository/index.js";
 import {
   compare,
   createLoginCredntials,
-  createToken,
   decryption,
   encryption,
   hash,
@@ -33,6 +32,12 @@ import {
   set,
   ttl,
 } from "../../common/services/cache.service.js";
+const loginAttemptsKey = ({ email }) => {
+  return `Login::${email}::FailedAttempts`;
+};
+const loginBanKey = ({ email }) => {
+  return `Login::${email}::Ban`;
+};
 export const signup = async ({ email, password, username, phone }) => {
   const dublicate = await findOne({
     model: UserModel,
@@ -54,9 +59,6 @@ export const signup = async ({ email, password, username, phone }) => {
   return account;
 };
 import { OAuth2Client } from "google-auth-library";
-import { trusted } from "mongoose";
-import { promise } from "zod";
-
 const client = new OAuth2Client();
 async function verifyGoogleAccount(idToken) {
   const ticket = await client.verifyIdToken({
@@ -113,7 +115,7 @@ export const signupWithGmail = async ({ idToken }, issuer) => {
   }
 };
 
-const sendEmailOtp = async ({
+export const sendEmailOtp = async ({
   email,
   subject,
   expiresIN = 120,
@@ -160,6 +162,13 @@ const sendEmailOtp = async ({
   });
 };
 export const login = async ({ email, password }, issuer) => {
+  const banTTL = await ttl({ key: loginBanKey({ email }) });
+  if (banTTL > 0) {
+    throw TooManyRequestException({
+      message: `Account temporarily blocked. Try again in ${banTTL} seconds`,
+    });
+  }
+
   const account = await findOne({
     model: UserModel,
     filter: {
@@ -174,7 +183,28 @@ export const login = async ({ email, password }, issuer) => {
 
   const match = await compare(password, account.password);
   if (!match) {
-    throw NotFoundException("Not Exits");
+    const attempts = await incBy({ key: loginAttemptsKey({ email }) });
+    if (attempts >= 5) {
+      await set({ key: loginBanKey({ email }), value: 1, ttl: 300 });
+      await del({ key: loginAttemptsKey({ email }) });
+      throw TooManyRequestException({
+        message: "Too many failed login attempts. Try again in 5 minutes",
+      });
+    }
+    throw NotFoundException("Invalid email or password");
+  }
+  await del({ key: loginAttemptsKey({ email }) });
+
+  if (account.twoFactorEnabled) {
+    await sendEmailOtp({
+      email: account.email,
+      subject: EmailSubjectEnum.LOGIN_2FA,
+    });
+
+    return {
+      twoFactorRequired: true,
+      message: "OTP sent to your email",
+    };
   }
   account.phone = await decryption(account.phone);
 
@@ -315,4 +345,40 @@ export const resetForgotPassword = async ({ email, otp, password }) => {
     key: [...result[0], ...result[1]],
   });
   return;
+};
+
+export const verifyLoginTwoFactor = async ({ email, otp }, issuer) => {
+  const account = await findOne({
+    model: UserModel,
+    filter: {
+      email,
+      provider: ProviderEnum.SYSTEM,
+      confirmEmail: { $exists: true },
+      twoFactorEnabled: true,
+    },
+  });
+  if (!account) {
+    throw NotFoundException("Invalid account");
+  }
+  const key = UserEmailKey({
+    email,
+    subject: EmailSubjectEnum.LOGIN_2FA,
+  });
+  const hashedOTP = await get({ key });
+  if (!hashedOTP) {
+    throw ConflictException("OTP not found or expired");
+  }
+  const isValid = await compare(String(otp), hashedOTP);
+  if (!isValid) {
+    throw BadRequestException("Invalid OTP");
+  }
+  await del({ key });
+
+  if (account.phone) {
+    account.phone = await decryption(account.phone);
+  }
+  return await createLoginCredntials({
+    user: account,
+    issuer,
+  });
 };

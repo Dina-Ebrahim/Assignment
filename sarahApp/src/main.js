@@ -12,7 +12,7 @@ const port = 3000;
 await bootstrapDB(port, app);
 app.use(express.json());
 app.use(cors());
-
+app.use("/assets", express.static("./assets"));
 app.use("/auth", authenticationcontroller);
 app.use("/user", userController);
 app.use(globalErrorHandling);

@@ -8,6 +8,7 @@ import {
   requestForForgetPassword,
   verifyForgotPassword,
   resetForgotPassword,
+  verifyLoginTwoFactor,
 } from "./authentication.service.js";
 import { successResponse } from "../../common/utils/success.response.js";
 import * as validators from "./authentication.validation.js";
@@ -66,6 +67,24 @@ router.patch(
     return successResponse({ res, status: 200, data });
   },
 );
+
+router.post(
+  "/verify-login-2fa",
+  validation(validators.verifyLoginTwoFactor),
+  async (req, res) => {
+    const data = await verifyLoginTwoFactor(
+      req.validate.body,
+      `${req.protocol}://${req.host}`,
+    );
+
+    return successResponse({
+      res,
+      status: 200,
+      data,
+    });
+  },
+);
+
 router.get("/login", validation(validators.login), async (req, res) => {
   const data = await login(req.validate.body, `${req.protocol}://${req.host}`);
   return successResponse({ res, status: 201, data });

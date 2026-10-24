@@ -1,4 +1,3 @@
-import { Query } from "mongoose";
 import { email, z } from "zod";
 import { GenderEnum } from "../../common/enum/index.js";
 import { generalValidationFields } from "../../common/validations.js";
@@ -56,6 +55,25 @@ export const resetForgotPassword = (lang) => {
       }),
   });
 };
+export const confirmTwoFactorSchema = (lang) =>
+  z.strictObject({
+    otp: generalValidationFields.otp(lang),
+  });
+
+export const confirmTwoFactor = (lang) =>
+  z.object({
+    body: confirmTwoFactorSchema(lang),
+  });
+export const verifyLoginTwoFactorSchema = (lang) =>
+  z.strictObject({
+    email: generalValidationFields.email(lang),
+    otp: generalValidationFields.otp(lang),
+  });
+
+export const verifyLoginTwoFactor = (lang) =>
+  z.object({
+    body: verifyLoginTwoFactorSchema(lang),
+  });
 export const signup = (lang) => {
   return z.object({
     body: loginSchema(lang)

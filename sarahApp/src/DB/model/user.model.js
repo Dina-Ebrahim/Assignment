@@ -31,6 +31,14 @@ const userSchema = new mongoose.Schema(
       enum: Object.values(ProviderEnum),
       default: ProviderEnum.SYSTEM,
     },
+    twoFactorEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    twoFactorEnabledAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     collection: "Users",
