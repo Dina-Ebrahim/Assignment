@@ -7,7 +7,8 @@ export const validation = (schema) => {
     const validationresult = schema(lang).safeParse({
       body: req.body,
       query: req.query,
-      param: req.param,
+      params: req.params,
+      files: req.files ?? [],
     });
     console.log(validationresult);
 

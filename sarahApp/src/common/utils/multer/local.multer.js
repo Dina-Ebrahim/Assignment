@@ -8,6 +8,7 @@ import { BadRequestException } from "../../exception/index.js";
 export const fileValidation = {
   image: ["image/jpeg", "image/png", "image/gif"],
   files: ["application/pdf", "application/json"],
+  chat: ["image/jpeg", "image/png", "image/gif", "application/pdf"],
 };
 export const localFileUpload = ({ maxFileSize = 5, validation = [] } = {}) => {
   const storage = multer.memoryStorage();

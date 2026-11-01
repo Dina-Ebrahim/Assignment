@@ -74,8 +74,10 @@ export const find = async ({
     query = query.populate(options.populate);
   }
 
-  if (options.skip) {
-    query = query.skip(options.skip);
+  if (options.skip !== undefined) query = query.skip(options.skip);
+
+  if (options.sort) {
+    query = query.sort(options.sort);
   }
 
   if (options.limit) {
@@ -89,6 +91,10 @@ export const find = async ({
   return await query.exec();
 };
 
+//count
+export const countDocument = async ({ filter = {}, model } = {}) => {
+  return await model.countDocuments(filter);
+};
 //insertMany
 export const insertMany = async ({ data, model }) => {
   return await model.insertMany(data);

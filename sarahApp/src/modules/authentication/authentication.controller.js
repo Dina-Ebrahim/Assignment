@@ -13,6 +13,8 @@ import {
 import { successResponse } from "../../common/utils/success.response.js";
 import * as validators from "./authentication.validation.js";
 import { validation } from "../../middelware/index.js";
+import { del } from "../../common/services/cache.service.js";
+import { generateLimiter } from "../../common/utils/limiter.js";
 
 const router = Router();
 
@@ -84,10 +86,23 @@ router.post(
     });
   },
 );
-
-router.get("/login", validation(validators.login), async (req, res) => {
-  const data = await login(req.validate.body, `${req.protocol}://${req.host}`);
-  return successResponse({ res, status: 201, data });
+const loginLimiter = generateLimiter({
+  limit: 5,
+  ttl: 5,
+  skipSuccessfulRequests: true,
 });
+router.get(
+  "/login",
+  loginLimiter,
+  validation(validators.login),
+  async (req, res) => {
+    const data = await login(
+      req.validate.body,
+      `${req.protocol}://${req.host}`,
+    );
+    await del({ key: req.rateLimit.key });
+    return successResponse({ res, status: 201, data });
+  },
+);
 
 export default router;

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { GenderEnum, LanguageEnum } from "./enum/index.js";
+import mongoose from "mongoose";
 const validationMessage = {
   100: {
     ar: "عفوا، الحد الأدنى لطول اسم المستخدم هو 2 أحرف",
@@ -36,6 +37,7 @@ export const matchField = ({ original, copy, ctx, data, lang }) => {
     });
   }
 };
+
 export const generalValidationFields = {
   username: (lang) =>
     z.string().min(2, {
@@ -70,4 +72,19 @@ export const generalValidationFields = {
       .min(8)
       .max(16),
   matchField,
+  id: (lang) =>
+    z.string().refine((data) => mongoose.Types.ObjectId.isValid(data), {
+      message: "Invalid object ID",
+    }),
+  file: (lang) =>
+    z.strictObject({
+      fieldname: z.string(),
+      originalname: z.string(),
+      encoding: z.string(),
+      mimetype: z.string(),
+      buffer: z.instanceof(Buffer),
+      size: z.number(),
+
+      finalPath: z.string(),
+    }),
 };
