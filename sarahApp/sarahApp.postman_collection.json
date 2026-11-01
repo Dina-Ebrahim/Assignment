@@ -410,6 +410,138 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "File Upload",
+      "item": [
+        {
+          "name": "profile-image",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_07ox}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "attechment",
+                  "type": "file",
+                  "src": [
+                    "/C:/Users/USER/OneDrive/Pictures/Screenshots/Screenshot 2026-10-20 134723.png",
+                    "/C:/Users/USER/Downloads/FE_Angular/node_modules/caniuse-lite/data/features/pdf-viewer.js"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/user/profile-image",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "user",
+                "profile-image"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2-step-verification",
+      "item": [
+        {
+          "name": "verify-login-2fa",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n          \"email\":\"ebrahimd375@gmail.com\",\r\n          \"otp\":\"965006\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/auth/verify-login-2fa",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "auth",
+                "verify-login-2fa"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "enable-2fa",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"email\":\"ebrahimd375@gmail.com\",\r\n    \"password\":\"146200#05Dina\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/user/enable-2fa",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "user",
+                "enable-2fa"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "confirm-2fa",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n        \"email\":\"ebrahimd375@gmail.com\",\r\n    \"password\":\"146200#05Dina\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/user/confirm-2fa",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "user",
+                "confirm-2fa"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "variable": [
@@ -443,6 +575,14 @@
     },
     {
       "key": "json_web_token_0qhd",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_0doa",
+      "secret": true
+    },
+    {
+      "key": "json_web_token_07ox",
       "secret": true
     }
   ]
